@@ -13,7 +13,7 @@ public class PointsCounter : MonoBehaviour
         if (_value == 5)
         {
             foreach (EnemyMovement enemy in _enemies)
-                enemy.ChangeSpeed();
+                enemy.SpeedUp();
         }
 
         if (_value >= 10)
@@ -21,7 +21,6 @@ public class PointsCounter : MonoBehaviour
             _value = 0;
             foreach (Point point in _points)
                 point.gameObject.SetActive(true);
-            return;
         }
     }
 }

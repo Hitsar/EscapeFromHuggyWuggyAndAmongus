@@ -10,6 +10,7 @@ namespace Enemy
             {
                 player.playerCanMove = false;
                 player.cameraCanMove = false;
+                player.enableHeadBob = false;
             }
         }
     }
