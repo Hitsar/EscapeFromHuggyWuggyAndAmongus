@@ -12,11 +12,12 @@ namespace UI.DiedMenu
         
         private IEnumerator StopEnemies()
         {
-            foreach (EnemyMovement enemy in _enemies)
-                enemy.StopMove();
+            Cursor.lockState = CursorLockMode.Locked;
+            FindObjectOfType<FirstPersonController>().IsMove(true);
             yield return new WaitForSeconds(10);
             foreach (EnemyMovement enemy in _enemies)
-                enemy.ResumeMove();
+                enemy.IsAttackedMove(false);
+            gameObject.SetActive(false);
         }
     }
 }

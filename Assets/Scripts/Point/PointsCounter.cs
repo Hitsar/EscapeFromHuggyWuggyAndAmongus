@@ -3,8 +3,8 @@ using UnityEngine;
 
 public class PointsCounter : MonoBehaviour
 {
-    [SerializeField] private Point[] _points;
     [SerializeField] private EnemyMovement[] _enemies;
+    [SerializeField] private Point.Point[] _points;
     private byte _value;
 
     public void AddPoint()
@@ -19,7 +19,7 @@ public class PointsCounter : MonoBehaviour
         if (_value >= 10)
         {
             _value = 0;
-            foreach (Point point in _points)
+            foreach (Point.Point point in _points)
                 point.gameObject.SetActive(true);
         }
     }

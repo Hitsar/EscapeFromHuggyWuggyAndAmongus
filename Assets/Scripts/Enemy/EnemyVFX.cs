@@ -4,14 +4,12 @@ namespace Enemy
 {
     public class EnemyVFX : MonoBehaviour
     {
-        public void OnRun()
-        {
-            
-        }
-        
-        public void OnAttack()
-        {
-            
-        }
+        private Animator _animator;
+
+        private void Start() => _animator = GetComponentInChildren<Animator>();
+
+        public void OnAttack() => _animator.SetTrigger("Attack");
+
+        public void Move(bool isStop) => _animator.SetBool("Stop", isStop);
     }
 }

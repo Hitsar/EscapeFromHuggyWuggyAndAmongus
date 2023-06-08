@@ -1,3 +1,4 @@
+using UI.DiedMenu;
 using UnityEngine;
 
 namespace Enemy
@@ -8,9 +9,9 @@ namespace Enemy
         {
             if (other.gameObject.TryGetComponent(out FirstPersonController player))
             {
-                player.playerCanMove = false;
-                player.cameraCanMove = false;
-                player.enableHeadBob = false;
+                player.IsMove(false);
+                GetComponent<EnemyVFX>().OnAttack();
+                FindObjectOfType<DiedMenuAnimator>(true).gameObject.SetActive(true);
             }
         }
     }
