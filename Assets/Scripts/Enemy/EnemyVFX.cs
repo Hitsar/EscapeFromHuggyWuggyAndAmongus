@@ -5,11 +5,20 @@ namespace Enemy
     public class EnemyVFX : MonoBehaviour
     {
         private Animator _animator;
+        private AudioSource _walk;
 
-        private void Start() => _animator = GetComponentInChildren<Animator>();
+        private void Start()
+        {
+            _animator = GetComponentInChildren<Animator>();
+            _walk = GetComponent<AudioSource>();
+        }
 
         public void OnAttack() => _animator.SetTrigger("Attack");
 
-        public void Move(bool isStop) => _animator.SetBool("Stop", isStop);
+        public void OnStopMove(bool isStop = true)
+        {
+            _animator.SetBool("Stop", isStop);
+            _walk.mute = isStop;
+        }
     }
 }

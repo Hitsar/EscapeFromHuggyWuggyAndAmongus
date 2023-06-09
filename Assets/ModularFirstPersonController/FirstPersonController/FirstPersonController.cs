@@ -9,6 +9,9 @@ using UnityEngine.UI;
 
 public class FirstPersonController : MonoBehaviour
 {
+    public AudioSource _walk;
+    public AudioSource _run;
+    
     private Rigidbody rb;
     private InputManager _inputManager;
 
@@ -184,29 +187,55 @@ public class FirstPersonController : MonoBehaviour
     }
 
     float camRotation;
-
-    private void Update()
+    
+    void FixedUpdate()
     {
-        #region Camera
-
-        // Control camera movement
-        if(cameraCanMove)
+        if (playerCanMove)
         {
-            Look(_inputManager.Player.Look.ReadValue<Vector2>());
-        }
+            // Calculate how fast we should be moving
+            Vector2 direction = _inputManager.Player.Move.ReadValue<Vector2>();
+            Vector3 targetVelocity = Quaternion.Euler(0, transform.eulerAngles.y, 0) * new Vector3(direction.x, 0, direction.y);
+            
+            isWalking = targetVelocity.x != 0 || targetVelocity.z != 0 && isGrounded ? true : false;
 
-        #endregion
+            // All movement calculations shile sprint is active
+            if (enableSprint && _inputManager.Player.Sprint.ReadValue<float>() > 0 && sprintRemaining > 0f && !isSprintCooldown)
+            {
+                rb.velocity = targetVelocity * sprintSpeed;
+                _run.mute = targetVelocity.x == 0 || targetVelocity.z == 0;
+
+                if (targetVelocity.x != 0 || targetVelocity.z != 0)
+                {
+                    isSprinting = true;
+
+                    if (hideBarWhenFull && !unlimitedSprint)
+                        sprintBarCG.alpha += 5 * Time.fixedDeltaTime;
+                }
+            }
+            else
+            {
+                rb.velocity = targetVelocity * walkSpeed;
+                _run.mute = true;
+                _walk.mute = targetVelocity.x == 0 || targetVelocity.z == 0;
+                
+                isSprinting = false;
+
+                if (hideBarWhenFull && sprintRemaining == sprintDuration)
+                    sprintBarCG.alpha -= 3 * Time.fixedDeltaTime;
+            }
+        }
         
+        if(cameraCanMove) Look(_inputManager.Player.Look.ReadValue<Vector2>());
+
         if(enableSprint)
         {
             if(isSprinting)
             {
                 isZoomed = false;
 
-                // Drain sprint remaining while sprinting
                 if(!unlimitedSprint)
                 {
-                    sprintRemaining -= 1 * Time.deltaTime;
+                    sprintRemaining -= 1 * Time.fixedDeltaTime;
                     if (sprintRemaining <= 0)
                     {
                         isSprinting = false;
@@ -216,15 +245,12 @@ public class FirstPersonController : MonoBehaviour
             }
             else
             {
-                // Regain sprint while not sprinting
-                sprintRemaining = Mathf.Clamp(sprintRemaining += 1 * Time.deltaTime, 0, sprintDuration);
+                sprintRemaining = Mathf.Clamp(sprintRemaining += 1 * Time.fixedDeltaTime, 0, sprintDuration);
             }
-
-            // Handles sprint cooldown 
-            // When sprint remaining == 0 stops sprint ability until hitting cooldown
+            
             if(isSprintCooldown)
             {
-                sprintCooldown -= 1 * Time.deltaTime;
+                sprintCooldown -= 1 * Time.fixedDeltaTime;
                 if (sprintCooldown <= 0)
                 {
                     isSprintCooldown = false;
@@ -235,7 +261,6 @@ public class FirstPersonController : MonoBehaviour
                 sprintCooldown = sprintCooldownReset;
             }
 
-            // Handles sprintBar 
             if(useSprintBar && !unlimitedSprint)
             {
                 float sprintRemainingPercent = sprintRemaining / sprintDuration;
@@ -243,73 +268,7 @@ public class FirstPersonController : MonoBehaviour
             }
         }
         
-        if(enableHeadBob)
-        {
-            HeadBob();
-        }
-    }
-
-    void FixedUpdate()
-    {
-        if (playerCanMove)
-        {
-            // Calculate how fast we should be moving
-            Vector2 direction = _inputManager.Player.Move.ReadValue<Vector2>();
-            Vector3 targetVelocity = new Vector3(direction.x, 0, direction.y);
-
-            // Checks if player is walking and isGrounded
-            // Will allow head bob
-
-            isWalking = targetVelocity.x != 0 || targetVelocity.z != 0 && isGrounded ? true : false;
-
-            // All movement calculations shile sprint is active
-            if (enableSprint && _inputManager.Player.Sprint.ReadValue<float>() > 0.1 && sprintRemaining > 0f && !isSprintCooldown)
-            {
-                targetVelocity = transform.TransformDirection(targetVelocity) * sprintSpeed;
-
-                // Apply a force that attempts to reach our target velocity
-                Vector3 velocity = rb.velocity;
-                Vector3 velocityChange = (targetVelocity - velocity);
-                velocityChange.x = Mathf.Clamp(velocityChange.x, -maxVelocityChange, maxVelocityChange);
-                velocityChange.z = Mathf.Clamp(velocityChange.z, -maxVelocityChange, maxVelocityChange);
-                velocityChange.y = 0;
-
-                // Player is only moving when valocity change != 0
-                // Makes sure fov change only happens during movement
-                if (velocityChange.x != 0 || velocityChange.z != 0)
-                {
-                    isSprinting = true;
-
-                    if (hideBarWhenFull && !unlimitedSprint)
-                    {
-                        sprintBarCG.alpha += 5 * Time.deltaTime;
-                    }
-                }
-
-                rb.AddForce(velocityChange, ForceMode.VelocityChange);
-            }
-            // All movement calculations while walking
-            else
-            {
-                isSprinting = false;
-
-                if (hideBarWhenFull && sprintRemaining == sprintDuration)
-                {
-                    sprintBarCG.alpha -= 3 * Time.deltaTime;
-                }
-
-                targetVelocity = transform.TransformDirection(targetVelocity) * walkSpeed;
-
-                // Apply a force that attempts to reach our target velocity
-                Vector3 velocity = rb.velocity;
-                Vector3 velocityChange = (targetVelocity - velocity);
-                velocityChange.x = Mathf.Clamp(velocityChange.x, -maxVelocityChange, maxVelocityChange);
-                velocityChange.z = Mathf.Clamp(velocityChange.z, -maxVelocityChange, maxVelocityChange);
-                velocityChange.y = 0;
-
-                rb.AddForce(velocityChange, ForceMode.VelocityChange);
-            }
-        }
+        if(enableHeadBob) HeadBob();
     }
 
     private void HeadBob()
@@ -348,13 +307,18 @@ public class FirstPersonController : MonoBehaviour
         playerCamera.transform.localEulerAngles = new Vector3(pitch, 0, 0);
     }
 
-    public void IsMove(bool move)
+    public void IsMove(bool isMove = true)
     {
-        playerCanMove = move;
-        cameraCanMove = move;
-        enableHeadBob = move;
+        playerCanMove = isMove;
+        cameraCanMove = isMove;
+        enableHeadBob = isMove;
+        Cursor.lockState = isMove ? CursorLockMode.Locked : CursorLockMode.None;
+    }
+
+    public void IsAttacked()
+    {
+        IsMove(false);
         OnAttacked?.Invoke(true);
-        Cursor.lockState = CursorLockMode.None;
     }
 }
 
@@ -389,6 +353,9 @@ public class FirstPersonController : MonoBehaviour
         EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
         GUILayout.Label("Camera Setup", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, fontStyle = FontStyle.Bold, fontSize = 13 }, GUILayout.ExpandWidth(true));
         EditorGUILayout.Space();
+
+        fpc._walk = (AudioSource)EditorGUILayout.ObjectField(new GUIContent("Walk"), fpc._walk, typeof(AudioSource), true);
+        fpc._run = (AudioSource)EditorGUILayout.ObjectField(new GUIContent("Run"), fpc._run, typeof(AudioSource), true);
 
         fpc.playerCamera = (Camera)EditorGUILayout.ObjectField(new GUIContent("Camera", "Camera attached to the controller."), fpc.playerCamera, typeof(Camera), true);
         fpc.fov = EditorGUILayout.Slider(new GUIContent("Field of View", "The camera’s view angle. Changes the player camera directly."), fpc.fov, fpc.zoomFOV, 179f);

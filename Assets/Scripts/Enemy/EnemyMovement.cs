@@ -19,13 +19,13 @@ namespace Enemy
             _vfx = GetComponent<EnemyVFX>();
             StartCoroutine(MoveToPlayer());
             StartCoroutine(MoveToTargetPoint());
-            _player.OnAttacked += IsAttackedMove;
+            _player.OnAttacked += StopMove;
         }
 
         private void FixedUpdate()
         {
-            if (_seePlayer) _navMeshAgent.SetDestination(_player.transform.position); 
-            _vfx.Move(_navMeshAgent.velocity.x == 0 || _navMeshAgent.velocity.z == 0);
+            if (_seePlayer) _navMeshAgent.SetDestination(_player.transform.position);
+            _vfx.OnStopMove(_navMeshAgent.velocity.x == 0 || _navMeshAgent.velocity.z == 0);
         }
         
         private void OnTriggerStay(Collider other) { if (other.gameObject.TryGetComponent(out FirstPersonController _)) _seePlayer = true; }
@@ -38,8 +38,12 @@ namespace Enemy
             _navMeshAgent.speed += 0.15f;
         }
 
-        public void IsAttackedMove(bool isStop = true) => _navMeshAgent.isStopped = isStop;
-        
+        public void StopMove(bool isStop = true)
+        {
+            _navMeshAgent.velocity = Vector3.zero;
+            _navMeshAgent.isStopped = isStop;
+        }
+
         private IEnumerator MoveToPlayer()
         {
             WaitForSeconds second = new WaitForSeconds(1);
