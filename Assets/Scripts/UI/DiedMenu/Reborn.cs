@@ -13,10 +13,9 @@ namespace UI.DiedMenu
         private IEnumerator StopEnemies()
         {
             FindObjectOfType<FirstPersonController>().IsMove();
-            yield return new WaitForSeconds(6);
+            yield return new WaitForSeconds(5);
             foreach (EnemyMovement enemy in _enemies)
                 enemy.StopMove(false);
-            gameObject.SetActive(false);
         }
     }
 }

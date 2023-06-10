@@ -9,9 +9,9 @@ namespace Enemy
         {
             if (other.gameObject.TryGetComponent(out FirstPersonController player))
             {
-                GetComponent<EnemyVFX>().OnAttack();
                 player.IsAttacked();
-                FindObjectOfType<DiedMenuAnimator>(true).gameObject.SetActive(true);
+                GetComponent<EnemyVFX>().OnAttack();
+                FindObjectOfType<DiedMenuAnimator>(true).Enable();
             }
         }
     }

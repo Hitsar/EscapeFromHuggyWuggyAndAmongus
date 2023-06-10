@@ -47,7 +47,6 @@ public class FirstPersonController : MonoBehaviour
     public float zoomStepTime = 5f;
 
     // Internal Variables
-    private bool isZoomed = false;
 
     #endregion
     #endregion
@@ -56,7 +55,6 @@ public class FirstPersonController : MonoBehaviour
 
     public bool playerCanMove = true;
     public float walkSpeed = 5f;
-    public float maxVelocityChange = 10f;
 
     // Internal Variables
     private bool isWalking = false;
@@ -110,10 +108,6 @@ public class FirstPersonController : MonoBehaviour
     public float crouchHeight = .75f;
     public float speedReduction = .5f;
 
-    // Internal Variables
-    private bool isCrouched = false;
-    private Vector3 originalScale;
-
     #endregion
     #endregion
 
@@ -139,7 +133,6 @@ public class FirstPersonController : MonoBehaviour
         
         // Set internal variables
         playerCamera.fieldOfView = fov;
-        originalScale = transform.localScale;
         jointOriginalPos = joint.localPosition;
 
         if (!unlimitedSprint)
@@ -231,8 +224,6 @@ public class FirstPersonController : MonoBehaviour
         {
             if(isSprinting)
             {
-                isZoomed = false;
-
                 if(!unlimitedSprint)
                 {
                     sprintRemaining -= 1 * Time.fixedDeltaTime;

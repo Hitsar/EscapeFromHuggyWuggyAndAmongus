@@ -4,7 +4,7 @@ namespace UI.PauseMenu
 {
     public class PauseMenuSwitcher : MonoBehaviour
     {
-        [SerializeField] private PauseMenuAnimator _pauseMenu;
+        [SerializeField] private GameObject _pauseMenu;
         private InputManager _inputManager;
 
         private void Awake()

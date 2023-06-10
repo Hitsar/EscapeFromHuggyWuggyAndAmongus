@@ -17,9 +17,9 @@ namespace Enemy
             _navMeshAgent = GetComponent<NavMeshAgent>();
             _player = FindObjectOfType<FirstPersonController>();
             _vfx = GetComponent<EnemyVFX>();
-            StartCoroutine(MoveToPlayer());
-            StartCoroutine(MoveToTargetPoint());
+            
             _player.OnAttacked += StopMove;
+            StartCoroutine(MoveToTargetPoint());
         }
 
         private void FixedUpdate()
@@ -38,22 +38,7 @@ namespace Enemy
             _navMeshAgent.speed += 0.15f;
         }
 
-        public void StopMove(bool isStop = true)
-        {
-            _navMeshAgent.velocity = Vector3.zero;
-            _navMeshAgent.isStopped = isStop;
-        }
-
-        private IEnumerator MoveToPlayer()
-        {
-            WaitForSeconds second = new WaitForSeconds(1);
-            while (true)
-            {
-                Physics.Raycast(transform.position, Vector3.forward, out RaycastHit hit);
-                _seePlayer = hit.collider.TryGetComponent(out FirstPersonController _);
-                yield return second;
-            }
-        }
+        public void StopMove(bool isStop = true) => _navMeshAgent.isStopped = isStop;
 
         private IEnumerator MoveToTargetPoint()
         {
