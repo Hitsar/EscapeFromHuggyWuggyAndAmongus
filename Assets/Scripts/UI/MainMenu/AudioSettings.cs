@@ -12,5 +12,8 @@ namespace UI.MainMenu
         public void ChangeSoundVolume(float value) => _audioMixer.SetFloat("Sound", value);
 
         public void ChangeMusicVolume(float value) => _audioMixer.SetFloat("Music", value);
+        
+        public void MuteAudio() => _audioMixer.SetFloat("Audio", -80);
+        public void PlayAudio() =>  _audioMixer.SetFloat("Audio", 0);
     }
 }

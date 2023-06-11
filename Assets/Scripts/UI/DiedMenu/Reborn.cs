@@ -1,5 +1,6 @@
 using Enemy;
 using System.Collections;
+using System.Runtime.InteropServices;
 using UnityEngine;
 
 namespace UI.DiedMenu
@@ -8,7 +9,16 @@ namespace UI.DiedMenu
     {
         [SerializeField] private EnemyMovement[] _enemies;
 
-        public void StartCoroutine() => StartCoroutine(StopEnemies());
+        [DllImport("__Internal")]
+        private static extern void RewardedAdExtern();
+
+        public void ShowAd() => RewardedAdExtern();
+        
+        public void OnRewarded()
+        {
+            StartCoroutine(StopEnemies());
+            GetComponent<DiedMenuAnimator>().Disable();
+        }
         
         private IEnumerator StopEnemies()
         {

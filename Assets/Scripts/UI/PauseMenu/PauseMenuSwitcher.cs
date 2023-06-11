@@ -15,7 +15,7 @@ namespace UI.PauseMenu
             _inputManager.UI.Pause.performed += _ => Switch();
         }
 
-        public void Switch()
+        private void Switch()
         {
             if (_diedMenuIsActive) return;
             bool active = _pauseMenu.gameObject.activeSelf;
