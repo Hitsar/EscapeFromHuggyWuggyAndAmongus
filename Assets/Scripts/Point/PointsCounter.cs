@@ -10,17 +10,18 @@ public class PointsCounter : MonoBehaviour
     public void AddPoint()
     {
         _value++;
-        if (_value == 5)
+        switch (_value)
         {
-            foreach (EnemyMovement enemy in _enemies)
-                enemy.SpeedUp();
-        }
-
-        if (_value >= 10)
-        {
-            _value = 0;
-            foreach (Point.Point point in _points)
-                point.gameObject.SetActive(true);
+            case 57:
+                foreach (EnemyMovement enemy in _enemies)
+                    enemy.SpeedUp();
+                break;
+            
+            case >= 171:
+                _value = 0;
+                foreach (Point.Point point in _points)
+                    point.gameObject.SetActive(true);
+                break;
         }
     }
 }

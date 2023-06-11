@@ -13,15 +13,14 @@ GameObject:
   - component: {fileID: 5475984488602497571}
   - component: {fileID: 5475984488602497572}
   - component: {fileID: 5475984488602497573}
-  - component: {fileID: 1315558420004870605}
   - component: {fileID: 3077050839272544715}
   - component: {fileID: 7682851734940278813}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: point
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &5475984488602497574
 Transform:
@@ -113,19 +112,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9466f23f24347c8b2c16b3dc33ce844, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1315558420004870605
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5475984488602497575}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3c511172c63846f7a5f6a4e1dfb4e8e8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _particle: {fileID: 3077050839272544715}
 --- !u!198 &3077050839272544715
 ParticleSystem:
   m_ObjectHideFlags: 0

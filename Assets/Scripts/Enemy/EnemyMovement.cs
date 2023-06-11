@@ -44,7 +44,7 @@ namespace Enemy
         {
             while (true)
             {
-                yield return new WaitForSeconds(Random.Range(7, 13));
+                yield return new WaitForSeconds(Random.Range(7, 14));
                 _navMeshAgent.SetDestination(_targetPoints[Random.Range(0, _targetPoints.Length - 1)].position);
             }
         }

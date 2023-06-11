@@ -6,6 +6,7 @@ namespace UI.PauseMenu
     {
         [SerializeField] private GameObject _pauseMenu;
         private InputManager _inputManager;
+        private bool _diedMenuIsActive;
 
         private void Awake()
         {
@@ -16,10 +17,13 @@ namespace UI.PauseMenu
 
         public void Switch()
         {
-            bool active = _pauseMenu.gameObject.activeSelf == true;
+            if (_diedMenuIsActive) return;
+            bool active = _pauseMenu.gameObject.activeSelf;
             _pauseMenu.gameObject.SetActive(!active);
             Cursor.lockState = active ? CursorLockMode.Locked : CursorLockMode.None;
             Time.timeScale = active ? 1 : 0;
         }
+        
+        public void DiedMenuIsActive(bool active) => _diedMenuIsActive = active;
     }
 }

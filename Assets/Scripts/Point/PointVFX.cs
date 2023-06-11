@@ -6,6 +6,6 @@ namespace Point
     {
         [SerializeField] private ParticleSystem _particle;
 
-        public void OnDisable() => _particle.Play();
+        private void OnDisable() => _particle.Play();
     }
 }
