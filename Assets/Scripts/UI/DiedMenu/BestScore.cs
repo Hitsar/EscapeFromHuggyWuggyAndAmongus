@@ -15,6 +15,6 @@ namespace UI.DiedMenu
             _player.OnAttacked += SetScore;
         }
 
-        private void SetScore(bool _) => _text.text = "Рекорд: " + Progress.Instance.PlayerInfo.Score;
+        private void SetScore(bool _) => _text.text = "Рекорд: __"; // + Progress.Instance.PlayerInfo.Score;
     }
 }
