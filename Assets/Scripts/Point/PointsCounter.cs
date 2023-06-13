@@ -18,6 +18,7 @@ namespace Point
         {
             _score++;
             _display.Display(_score);
+            Progress.Instance.SaveToLeaderboard(_score);
             
             _value++;
             switch (_value)

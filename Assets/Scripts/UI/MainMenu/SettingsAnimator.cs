@@ -12,7 +12,7 @@ namespace UI.MainMenu
 
         public void Disable()
         {
-            transform.DOLocalMoveY(-1000, 1).SetEase(Ease.OutCubic);
+            transform.DOLocalMoveY(-900, 1).SetEase(Ease.OutCubic);
         }
     }
 }
