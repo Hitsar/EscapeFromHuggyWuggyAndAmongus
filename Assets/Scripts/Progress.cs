@@ -17,10 +17,7 @@ public class Progress : MonoBehaviour
     
     [DllImport("__Internal")]
     private static extern void SetToLeaderboard(int value);
-    
-    [DllImport("__Internal")]
-    private static extern void GetDevice();
-    
+
     public PlayerInfo PlayerInfo;
     
     public static Progress Instance;
@@ -39,7 +36,6 @@ public class Progress : MonoBehaviour
         DontDestroyOnLoad(gameObject);
         Instance = this;
         LoadExtern();
-        GetDevice();
     }
 
     private void Save()

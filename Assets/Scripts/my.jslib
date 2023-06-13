@@ -50,8 +50,4 @@ mergeInto(LibraryManager.library, {
             }
         })
     },
-    
-    GetDevice : function(){
-        myGameInstance.SendMessage('YandexSDK', 'GetDeviseType', ysdk.deviceInfo.type);
-    }
 });

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class MobileDevise : MonoBehaviour
+public class MobileDevice : MonoBehaviour
 {
     private void Start()
     {
