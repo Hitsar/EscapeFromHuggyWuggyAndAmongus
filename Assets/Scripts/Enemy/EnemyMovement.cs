@@ -4,6 +4,7 @@ using UnityEngine.AI;
 
 namespace Enemy
 {
+    [RequireComponent(typeof(NavMeshAgent))]
     public class EnemyMovement : MonoBehaviour
     {
         [SerializeField] private Transform[] _targetPoints;

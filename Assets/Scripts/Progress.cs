@@ -54,5 +54,5 @@ public class Progress : MonoBehaviour
 
     public void SetPlayerInfo(string value) => PlayerInfo = JsonUtility.FromJson<PlayerInfo>(value);
 
-    public void GetDeviseType(string type) => IsPhone = type == "mobile";
+    public void GetDeviceType(string type) => IsPhone = type == "mobile";
 }
